@@ -13,6 +13,7 @@ Blender script that lets you bake textures from the active object onto a materia
 
 ## Using the Script
 - Load the script into your blender project. By default you can use the tabs in the top-center of the window to open the scripting workspace. Then use the 'open' button to open the script.
+- Set the variables at the top of the script. Set the size, interpolation, save and path variables to suit your needs. You do not need to edit anything below the \-\-\-\-\- line.
 - Select all of the objects you want to be involved. By default you can do this by holding shift and left-clicking on the top and bottom of them in the scene view. Alternativley you can hold alt and left-click each object one at a time.
 - Hold alt and left-click the object you want to be the active object.
 - Run the script from the scripting tab. By default you can do this by pressing the 'arrow' \/ 'play' button.
