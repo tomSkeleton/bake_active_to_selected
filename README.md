@@ -1,4 +1,4 @@
-# bake_active_to_selected
+# Bake Active to Selected
 Blender script that lets you bake textures from the active object onto a material held by the selected objects.
 
 ## Glossary
