@@ -8,8 +8,9 @@ Blender script that lets you bake textures from the active object onto a materia
 - Selected Object \: An object which blender can work on, but is not active. By default a selecetd object will have its name written in orange font in the Scene Collection.
 
 ## Requirments
-- Your selected objects must have a single material with the same name as your active object.  
-- All of the relevant objects must be visible, and all other objects must be hidden.
+- Your selected object(s) must have a single material with the same name as your active object. e.g. if your active object is called 'Cool Guy' then your selceted object should have a single material also called 'Cool Guy'. 
+- All of the relevant objects must be visible, and all other objects should be hidden.
+- Your render engine must by 'cycles'.
 
 ## Using the Script
 - Load the script into your blender project. By default you can use the tabs in the top-center of the window to open the scripting workspace. Then use the 'open' button to open the script.
