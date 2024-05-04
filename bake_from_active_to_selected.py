@@ -28,9 +28,9 @@ roughness_interpolation = 'Linear'
 normal_interpolation = 'Linear'
 
 ## EXPORT OPTIONS
-# choose if selcted objects should be exported.
-# exported objects are saved as glbf files.
-export = False
+export = False # choose if selcted objects should be exported as gltf files.
+export_modifiers = False # if true apply modifiers to exported objects
+export_anims = False # if true each exported object will have its animations baked in.
 
 ## SAVING OPTIONS
 # set if the generated textures are saved or not.
@@ -47,16 +47,12 @@ path = ""
 # no_bakes is not defined so it will just throw an error and stop the script
 if sum([bake_diffuse,bake_roughness,bake_normal]) == 0 : no_bakes()
 
-# easy references to common objects used by blender.
-C = bpy.context
-D = bpy.data
-O = C.view_layer.objects
-I = bpy.data.images
-
-active = C.active_object
-selected = C.selected_objects ; selected.remove(active)
+# get environment variables
+active = bpy.context.active_object
+selected = bpy.context.selected_objects
+selected.remove(active)
 for object in selected : object.select_set(False)
-material = D.materials[active.name]
+material = bpy.data.materials[active.name]
 nodes = material.node_tree.nodes
 tree = material.node_tree
 
@@ -76,7 +72,7 @@ tree.links.new( bsdf.outputs['BSDF'], nodes['Material Output'].inputs['Surface']
 # define the function to perform a loop bake
 def loop_bake(_type,_interpolation):
     # create or find the target texture
-    if active.name + "_" + _type in I : _texture = I[active.name + "_" + _type]
+    if active.name + "_" + _type in bpy.data.images : _texture = bpy.data.images[active.name + "_" + _type]
     else : _texture = bpy.data.images.new(active.name + "_" + _type, tex_size[0], tex_size[1])
     
     # create or find the target node
@@ -93,7 +89,7 @@ def loop_bake(_type,_interpolation):
     
     # bake to the target node
     for object in selected:
-        O.active = object
+        bpy.context.view_layer.objects.active = object
         active.select_set(True)
         bpy.ops.object.bake(
             type = _type.upper(),
@@ -129,16 +125,21 @@ if bake_normal : loop_bake('normal',normal_interpolation)
 
 # if export, export
 if export:
+    for object in selected : object.select_set(False)
+    active.select_set(False)
     for object in selected :
-        O.active = object
+        object.select_set(True)
         bpy.ops.export_scene.gltf(
-            use_active_scene = True,
+            use_selection = True,
             filepath = path + object.name,
-            export_animations = False
+            export_animations = export_anims,
+            export_apply = export_modifiers
             )
+        object.select_set(False)
 
 # reset the selcted and active objects to avoid confusion
-O.active = active
+bpy.context.view_layer.objects.active = active
+active.select_set(True)
 for object in selected : object.select_set(True)
 
 print('\n \nJOBS DONE\n')
